@@ -43,6 +43,9 @@ async function connectToDevice(device, index) {
         availableDevices.splice(index, 1);
         updateDeviceList();
         updateConnectedDeviceList();
+
+        // Play audio on the connected Bluetooth device
+        playAudioOnBluetoothDevice();
     } catch (error) {
         console.log('Error:', error);
         alert('Could not connect to Bluetooth device: ' + error.message);
@@ -80,6 +83,9 @@ document.getElementById('audioFile').addEventListener('change', (event) => {
         const url = URL.createObjectURL(file);
         audioElement.src = url;
         audioElement.play();
+
+        // Play audio on the connected Bluetooth device after connecting
+        playAudioOnBluetoothDevice();
     }
 });
 
@@ -112,11 +118,38 @@ function extractYouTubeVideoID(url) {
 
 function onPlayerReady(event) {
     event.target.playVideo();
+
+    // Play audio on the connected Bluetooth device after loading YouTube video
+    playAudioOnBluetoothDevice();
 }
 
 audioElement.addEventListener('play', () => {
-    if (connectedDevices.length > 0) {
-        // Implement audio synchronization logic here
-        console.log('Audio is playing');
-    }
+    // Play audio on the connected Bluetooth device after local audio playback starts
+    playAudioOnBluetoothDevice();
 });
+
+function playAudioOnBluetoothDevice() {
+    if (connectedDevices.length > 0) {
+        const device = connectedDevices[0]; // Assuming only one device is connected
+        const stream = audioElement.captureStream();
+        const audioTrack = stream.getAudioTracks()[0];
+        
+        device.gatt.connect()
+            .then(server => {
+                return server.getPrimaryService('audio_source_service');
+            })
+            .then(service => {
+                return service.getCharacteristic('audio_source_characteristic');
+            })
+            .then(characteristic => {
+                return characteristic.writeValue(audioTrack);
+            })
+            .then(() => {
+                console.log('Audio sent to Bluetooth device');
+            })
+            .catch(error => {
+                console.error('Error sending audio to Bluetooth device:', error);
+                alert('Error sending audio to Bluetooth device: ' + error.message);
+            });
+    }
+}
