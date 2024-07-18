@@ -23,7 +23,7 @@ function updateDeviceList() {
     deviceList.innerHTML = '';
     availableDevices.forEach((device, index) => {
         const listItem = document.createElement('li');
-        listItem.textContent = JSON.stringfy(device) || `Device ${index + 1}`;
+        listItem.textContent = JSON.stringify(device) || `Device ${index + 1}`;
 
         const connectButton = document.createElement('button');
         connectButton.textContent = 'Connect';
@@ -75,7 +75,7 @@ function updateConnectedDeviceList() {
 
 async function displayConnectedDevices(device, server) {
     const serviceListElement = document.getElementById('connectedDeviceServices');
-    serviceListElement.innerHTML = JSON.stringfy(server);
+    serviceListElement.innerHTML = JSON.stringify(server);
 
     server.getPrimaryServices().then(services => {
         services.forEach(service => {
