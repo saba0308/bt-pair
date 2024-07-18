@@ -134,12 +134,15 @@ function playAudioOnBluetoothDevice() {
         const stream = audioElement.captureStream();
         const audioTrack = stream.getAudioTracks()[0];
         
+        const serviceUUID = 'your_audio_service_uuid'; // Replace with your actual service UUID
+        const characteristicUUID = 'your_audio_characteristic_uuid'; // Replace with your actual characteristic UUID
+        
         device.gatt.connect()
             .then(server => {
-                return server.getPrimaryService('audio_source_service');
+                return server.getPrimaryService(serviceUUID);
             })
             .then(service => {
-                return service.getCharacteristic('audio_source_characteristic');
+                return service.getCharacteristic(characteristicUUID);
             })
             .then(characteristic => {
                 return characteristic.writeValue(audioTrack);
