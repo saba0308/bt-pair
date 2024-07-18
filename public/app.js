@@ -23,8 +23,8 @@ function updateDeviceList() {
     deviceList.innerHTML = '';
     availableDevices.forEach((device, index) => {
         const listItem = document.createElement('li');
-        listItem.textContent = JSON.stringify(device) || `Device ${index + 1}`;
-
+        listItem.textContent = device.name || `Device ${index + 1}`;
+alert(device)
         const connectButton = document.createElement('button');
         connectButton.textContent = 'Connect';
         connectButton.addEventListener('click', () => connectToDevice(device, index));
