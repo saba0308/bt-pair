@@ -7,11 +7,14 @@
 </head>
 <body>
     <h1>Bluetooth Audio Stream</h1>
-    <button id="connect">Connect to Bluetooth Device</button>
-    <p id="instructions">Please select a Bluetooth device to connect.</p>
+    <button id="scan">Scan for Bluetooth Devices</button>
     <div id="deviceList">
-        <h2>Connected Devices</h2>
+        <h2>Available Devices</h2>
         <ul id="devices"></ul>
+    </div>
+    <div id="connectedDeviceList">
+        <h2>Connected Devices</h2>
+        <ul id="connectedDevices"></ul>
     </div>
     <script src="app.js"></script>
 </body>
