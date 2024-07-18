@@ -5,18 +5,23 @@ let youtubePlayer;
 
 document.getElementById('scan').addEventListener('click', async () => {
     try {
+        // Request Bluetooth devices with device_information service
         const devices = await navigator.bluetooth.requestDevice({
             acceptAllDevices: true,
             optionalServices: ['battery_service', 'device_information']
         });
 
-        availableDevices.push(devices);
+        // Add discovered devices to availableDevices array
+        availableDevices.push(...devices);
+
+        // Update device list on UI
         updateDeviceList();
     } catch (error) {
-        console.log('Error:', error);
+        console.error('Error scanning for Bluetooth devices:', error);
         alert('Could not scan for Bluetooth devices: ' + error.message);
     }
 });
+
 
 function updateDeviceList() {
     const deviceList = document.getElementById('devices');
