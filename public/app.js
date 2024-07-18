@@ -21,14 +21,25 @@ document.getElementById('scan').addEventListener('click', async () => {
 function updateDeviceList() {
     const deviceList = document.getElementById('devices');
     deviceList.innerHTML = '';
+
     availableDevices.forEach((device, index) => {
         const listItem = document.createElement('li');
-        listItem.textContent = device.name || `Device ${index + 1}`;
-alert(JSON.stringify(device))
+
+        // Display device name or placeholder
+        const deviceName = device.name || `Device ${index + 1}`;
+        listItem.textContent = deviceName;
+
+        // Display additional device information
+        const deviceDetails = document.createElement('p');
+        deviceDetails.textContent = `ID: ${device.id}, Class: ${device.class}`;
+
+        // Create connect button for each device
         const connectButton = document.createElement('button');
         connectButton.textContent = 'Connect';
         connectButton.addEventListener('click', () => connectToDevice(device, index));
 
+        // Append elements to the list item
+        listItem.appendChild(deviceDetails);
         listItem.appendChild(connectButton);
         deviceList.appendChild(listItem);
     });
