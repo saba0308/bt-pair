@@ -6,7 +6,7 @@ document.getElementById('connect').addEventListener('click', async () => {
     try {
         const device = await navigator.bluetooth.requestDevice({
             filters: [{ services: ['battery_service'] }],
-            optionalServices: ['a2dp_source']
+            optionalServices: ['device_information']
         });
 
         const server = await device.gatt.connect();
@@ -14,9 +14,9 @@ document.getElementById('connect').addEventListener('click', async () => {
 
         connectedDevices.push(device);
         updateDeviceList();
-
     } catch (error) {
         console.log('Error:', error);
+        alert('Could not connect to Bluetooth device: ' + error.message);
     }
 });
 
