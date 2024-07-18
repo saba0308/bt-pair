@@ -24,11 +24,11 @@ function updateDeviceList() {
     availableDevices.forEach((device, index) => {
         const listItem = document.createElement('li');
         listItem.textContent = device.name || `Device ${index + 1}`;
-        
+
         const connectButton = document.createElement('button');
         connectButton.textContent = 'Connect';
         connectButton.addEventListener('click', () => connectToDevice(device, index));
-        
+
         listItem.appendChild(connectButton);
         deviceList.appendChild(listItem);
     });
@@ -39,10 +39,21 @@ async function connectToDevice(device, index) {
         const server = await device.gatt.connect();
         console.log('Connected to GATT Server');
 
-        connectedDevices.push(device);
+        // Store connected device details
+        connectedDevices.push({
+            device: device,
+            server: server
+        });
+
+        // Remove from available devices list
         availableDevices.splice(index, 1);
+
+        // Update UI lists
         updateDeviceList();
         updateConnectedDeviceList();
+
+        // Display connected device details
+        displayConnectedDevices();
 
         // Play audio on the connected Bluetooth device
         playAudioOnBluetoothDevice();
@@ -55,11 +66,35 @@ async function connectToDevice(device, index) {
 function updateConnectedDeviceList() {
     const connectedDeviceList = document.getElementById('connectedDevices');
     connectedDeviceList.innerHTML = '';
-    connectedDevices.forEach((device, index) => {
+    connectedDevices.forEach((connectedDevice, index) => {
         const listItem = document.createElement('li');
-        listItem.textContent = device.name || `Device ${index + 1}`;
+        listItem.textContent = connectedDevice.device.name || `Device ${index + 1}`;
         connectedDeviceList.appendChild(listItem);
     });
+}
+
+async function playAudioOnBluetoothDevice() {
+    if (connectedDevices.length > 0) {
+        const device = connectedDevices[0].device; // Assuming only one device is connected
+        const stream = audioElement.captureStream();
+        const audioTrack = stream.getAudioTracks()[0];
+
+        // Replace with actual service and characteristic UUIDs for audio transmission
+        const serviceUUID = 'your_audio_service_uuid';
+        const characteristicUUID = 'your_audio_characteristic_uuid';
+
+        try {
+            const server = connectedDevices[0].server;
+            const service = await server.getPrimaryService(serviceUUID);
+            const characteristic = await service.getCharacteristic(characteristicUUID);
+
+            await characteristic.writeValue(audioTrack);
+            console.log('Audio sent to Bluetooth device');
+        } catch (error) {
+            console.error('Error sending audio to Bluetooth device:', error);
+            alert('Error sending audio to Bluetooth device: ' + error.message);
+        }
+    }
 }
 
 document.getElementById('audioSource').addEventListener('change', (event) => {
@@ -127,32 +162,3 @@ audioElement.addEventListener('play', () => {
     // Play audio on the connected Bluetooth device after local audio playback starts
     playAudioOnBluetoothDevice();
 });
-
-function playAudioOnBluetoothDevice() {
-    if (connectedDevices.length > 0) {
-        const device = connectedDevices[0]; // Assuming only one device is connected
-        const stream = audioElement.captureStream();
-        const audioTrack = stream.getAudioTracks()[0];
-        
-        const serviceUUID = 'your_audio_service_uuid'; // Replace with your actual service UUID
-        const characteristicUUID = 'your_audio_characteristic_uuid'; // Replace with your actual characteristic UUID
-        
-        device.gatt.connect()
-            .then(server => {
-                return server.getPrimaryService(serviceUUID);
-            })
-            .then(service => {
-                return service.getCharacteristic(characteristicUUID);
-            })
-            .then(characteristic => {
-                return characteristic.writeValue(audioTrack);
-            })
-            .then(() => {
-                console.log('Audio sent to Bluetooth device');
-            })
-            .catch(error => {
-                console.error('Error sending audio to Bluetooth device:', error);
-                alert('Error sending audio to Bluetooth device: ' + error.message);
-            });
-    }
-}
