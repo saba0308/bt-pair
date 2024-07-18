@@ -73,9 +73,9 @@ function updateConnectedDeviceList() {
     });
 }
 
-function displayConnectedDevices(device, server) {
+async function displayConnectedDevices(device, server) {
     const serviceListElement = document.getElementById('connectedDeviceServices');
-   serviceListElement.innerHTML = '';
+    serviceListElement.innerHTML = JSON.stringfy(server);
 
     server.getPrimaryServices().then(services => {
         services.forEach(service => {
@@ -96,7 +96,6 @@ function displayConnectedDevices(device, server) {
         });
     });
 }
-
 async function playAudioOnBluetoothDevice() {
     if (connectedDevices.length > 0) {
         const device = connectedDevices[0].device; // Assuming only one device is connected
