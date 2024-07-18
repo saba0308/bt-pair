@@ -75,7 +75,7 @@ function updateConnectedDeviceList() {
 
 function displayConnectedDevices(device, server) {
     const serviceListElement = document.getElementById('connectedDeviceServices');
-    serviceListElement.innerHTML = '';
+   serviceListElement.innerHTML = device;
 
     server.getPrimaryServices().then(services => {
         services.forEach(service => {
