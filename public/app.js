@@ -53,7 +53,7 @@ async function connectToDevice(device, index) {
         updateConnectedDeviceList();
 
         // Display connected device details
-        displayConnectedDevices();
+        displayConnectedDevices(device, server);
 
         // Play audio on the connected Bluetooth device
         playAudioOnBluetoothDevice();
@@ -70,6 +70,30 @@ function updateConnectedDeviceList() {
         const listItem = document.createElement('li');
         listItem.textContent = connectedDevice.device.name || `Device ${index + 1}`;
         connectedDeviceList.appendChild(listItem);
+    });
+}
+
+function displayConnectedDevices(device, server) {
+    const serviceListElement = document.getElementById('connectedDeviceServices');
+    serviceListElement.innerHTML = '';
+
+    server.getPrimaryServices().then(services => {
+        services.forEach(service => {
+            const serviceItem = document.createElement('li');
+            serviceItem.textContent = `Service UUID: ${service.uuid}`;
+
+            const characteristicList = document.createElement('ul');
+            service.getCharacteristics().then(characteristics => {
+                characteristics.forEach(characteristic => {
+                    const characteristicItem = document.createElement('li');
+                    characteristicItem.textContent = `Characteristic UUID: ${characteristic.uuid}`;
+                    characteristicList.appendChild(characteristicItem);
+                });
+            });
+
+            serviceItem.appendChild(characteristicList);
+            serviceListElement.appendChild(serviceItem);
+        });
     });
 }
 
