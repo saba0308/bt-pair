@@ -13,7 +13,7 @@ document.getElementById('scan').addEventListener('click', async () => {
 
         // Add discovered devices to availableDevices array
         availableDevices.push(devices);
-        alert('device',JSON.stringify(await devices))
+        alert('device',devices.name,devices.servicesData)
         // Update device list on UI
         updateDeviceList();
     } catch (error) {
