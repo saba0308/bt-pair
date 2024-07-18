@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bluetooth Audio Stream</title>
+</head>
+<body>
+    <h1>Bluetooth Audio Stream</h1>
+    <button id="connect">Connect to Bluetooth Device</button>
+    <br>
+    <label for="audioSource">Choose an audio source:</label>
+    <select id="audioSource">
+        <option value="local">Local File</option>
+        <option value="youtube">YouTube</option>
+    </select>
+    <br>
+    <input type="file" id="audioFile" style="display: none;">
+    <br>
+    <div id="youtubeInput" style="display: none;">
+        <label for="youtubeUrl">YouTube URL:</label>
+        <input type="text" id="youtubeUrl" placeholder="Enter YouTube URL">
+        <button id="loadYoutube">Load YouTube Video</button>
+    </div>
+    <br>
+    <audio id="audio" controls></audio>
+    <div id="youtubePlayer" style="display: none;"></div>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="app.js"></script>
+</body>
+</html>
