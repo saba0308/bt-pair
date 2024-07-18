@@ -1,21 +1,34 @@
-
 let audioElement = document.getElementById('audio');
 let youtubePlayer;
-let selectedDevice;
+let connectedDevices = [];
 
 document.getElementById('connect').addEventListener('click', async () => {
     try {
-        selectedDevice = await navigator.bluetooth.requestDevice({
+        const device = await navigator.bluetooth.requestDevice({
             filters: [{ services: ['battery_service'] }],
             optionalServices: ['a2dp_source']
         });
 
-        const server = await selectedDevice.gatt.connect();
+        const server = await device.gatt.connect();
         console.log('Connected to GATT Server');
+
+        connectedDevices.push(device);
+        updateDeviceList();
+
     } catch (error) {
         console.log('Error:', error);
     }
 });
+
+function updateDeviceList() {
+    const deviceList = document.getElementById('devices');
+    deviceList.innerHTML = '';
+    connectedDevices.forEach(device => {
+        const listItem = document.createElement('li');
+        listItem.textContent = device.name || `Device ${connectedDevices.indexOf(device) + 1}`;
+        deviceList.appendChild(listItem);
+    });
+}
 
 document.getElementById('audioSource').addEventListener('change', (event) => {
     const source = event.target.value;
@@ -73,7 +86,7 @@ function onPlayerReady(event) {
 }
 
 audioElement.addEventListener('play', () => {
-    if (selectedDevice) {
+    if (connectedDevices.length > 0) {
         // Implement audio synchronization logic here
         console.log('Audio is playing');
     }
