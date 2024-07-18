@@ -24,7 +24,7 @@ function updateDeviceList() {
     availableDevices.forEach((device, index) => {
         const listItem = document.createElement('li');
         listItem.textContent = device.name || `Device ${index + 1}`;
-alert(device)
+alert(JSON.stringify(device))
         const connectButton = document.createElement('button');
         connectButton.textContent = 'Connect';
         connectButton.addEventListener('click', () => connectToDevice(device, index));
