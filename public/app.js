@@ -53,10 +53,10 @@ async function connectToDevice(device, index) {
         updateConnectedDeviceList();
 
         // Display connected device details
-        displayConnectedDevices(device, server);
+        await displayConnectedDevices(device, server);
 
         // Play audio on the connected Bluetooth device
-        playAudioOnBluetoothDevice();
+        // playAudioOnBluetoothDevice();
     } catch (error) {
         console.log('Error:', error);
         alert('Could not connect to Bluetooth device: ' + error.message);
