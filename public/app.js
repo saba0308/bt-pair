@@ -37,7 +37,7 @@ alert(JSON.stringify(device))
 async function connectToDevice(device, index) {
     try {
         const server = await device.gatt.connect();
-        console.log('Connected to GATT Server');
+        alert(`Connected to GATT Server`,JSON.stringify(server) );
 
         // Store connected device details
         connectedDevices.push({
