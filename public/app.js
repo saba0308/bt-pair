@@ -36,7 +36,7 @@ function updateDeviceList() {
 
         // Display additional device information
         const deviceDetails = document.createElement('p');
-        deviceDetails.textContent = `ID: ${device.id}, Class: ${device.class}`;
+        deviceDetails.textContent = `ID: ${device.id}, Class: ${device.serviceData}`;
 
         // Create connect button for each device
         const connectButton = document.createElement('button');
